@@ -19,8 +19,7 @@
     "watch": "rollup -c --watch"
   },
   "types": "dist/Viewer.d.ts",
-  "dependencies": {
-  },
+  "dependencies": {},
   "main": "dist/bim-viewer.js",
   "keywords": [
     "byteshift",
@@ -36,5 +35,12 @@
   "wiki": {
     "url": "https://github.com/haroldiedema/byteshift-elements/wiki"
   },
-  "homepage": "https://github.com/haroldiedema/byteshift-elements#readme"
+  "homepage": "https://github.com/haroldiedema/byteshift-elements#readme",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haroldiedema/byteshift-elements.git"
+  }
 }
