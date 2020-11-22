@@ -1,6 +1,6 @@
 {
   "name": "@byteshift/elements",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A reactive WebComponent microframework",
   "author": "Harold Iedema <harold@iedema.me>",
   "devDependencies": {
@@ -18,9 +18,9 @@
     "build": "rollup -c",
     "watch": "rollup -c --watch"
   },
-  "types": "dist/Viewer.d.ts",
+  "types": "dist/index.d.ts",
   "dependencies": {},
-  "main": "dist/bim-viewer.js",
+  "main": "dist/elements.js",
   "keywords": [
     "byteshift",
     "web components",
@@ -32,13 +32,7 @@
   "bugs": {
     "url": "https://github.com/haroldiedema/byteshift-elements/issues"
   },
-  "wiki": {
-    "url": "https://github.com/haroldiedema/byteshift-elements/wiki"
-  },
-  "homepage": "https://github.com/haroldiedema/byteshift-elements#readme",
-  "directories": {
-    "doc": "docs"
-  },
+  "homepage": "https://github.com/haroldiedema/byteshift-elements/wiki",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/haroldiedema/byteshift-elements.git"
