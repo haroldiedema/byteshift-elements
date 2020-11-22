@@ -1,5 +1,5 @@
 {
-  "name": "@haroldiedema/byteshift-elements",
+  "name": "@byteshift/elements",
   "version": "0.0.1",
   "description": "A reactive WebComponent microframework",
   "author": "Harold Iedema <harold@iedema.me>",
