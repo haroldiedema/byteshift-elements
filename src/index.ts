@@ -6,8 +6,8 @@
  */
 'use strict';
 
-import {AbstractComponent} from '@/Component/AbstractComponent';
-import {registerComponent} from '@/Component/ComponentRegistry';
+import {AbstractComponent} from './Component/AbstractComponent';
+import {registerComponent} from './Component/ComponentRegistry';
 
 // Public API.
 export * from './Decorator/Component';

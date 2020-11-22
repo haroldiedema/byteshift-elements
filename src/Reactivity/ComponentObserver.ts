@@ -6,8 +6,8 @@
  */
 'use strict';
 
-import {AbstractComponent}          from '@/Component/AbstractComponent';
-import {bindElementValueToProperty} from '@/Reactivity/PropertyToInputBinder';
+import {AbstractComponent}          from '../Component/AbstractComponent';
+import {bindElementValueToProperty} from '../Reactivity/PropertyToInputBinder';
 
 export class ComponentObserver
 {

@@ -6,9 +6,9 @@
  */
 'use strict';
 
-import {ComponentOptions}  from '@/Decorator/Component';
-import {ComponentObserver} from '@/Reactivity/ComponentObserver';
-import {composeStylesheet} from '@/Stylesheet/StylesheetFactory';
+import {ComponentOptions}  from '../Decorator/Component';
+import {ComponentObserver} from '../Reactivity/ComponentObserver';
+import {composeStylesheet} from '../Stylesheet/StylesheetFactory';
 
 export abstract class AbstractComponent
 {

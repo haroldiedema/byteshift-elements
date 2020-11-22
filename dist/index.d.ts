@@ -1,8 +1,8 @@
-import { AbstractComponent } from '@/Component/AbstractComponent';
-export * from '@/Decorator/Component';
-export * from '@/Decorator/Watch';
-export * from '@/Component/ComponentStyleDeclaration';
-export * from '@/Component/AbstractComponent';
+import { AbstractComponent } from './Component/AbstractComponent';
+export * from './Decorator/Component';
+export * from './Decorator/Watch';
+export * from './Component/ComponentStyleDeclaration';
+export * from './Component/AbstractComponent';
 export declare const Elements: ElementsRegistry;
 declare type ElementsRegistry = {
     register: (...elements: (typeof AbstractComponent)[]) => void;

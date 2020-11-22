@@ -1,4 +1,4 @@
-import { AbstractComponent } from '@/Component/AbstractComponent';
+import { AbstractComponent } from '../Component/AbstractComponent';
 export declare class ComponentObserver {
     readonly component: AbstractComponent;
     private root;

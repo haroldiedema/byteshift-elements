@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import {ComponentStyleDeclaration} from '@/Component/ComponentStyleDeclaration';
+import {ComponentStyleDeclaration} from '../Component/ComponentStyleDeclaration';
 
 export function composeStylesheet(root: ShadowRoot, componentStylesheet: ComponentStyleDeclaration): CSSStyleSheet
 {

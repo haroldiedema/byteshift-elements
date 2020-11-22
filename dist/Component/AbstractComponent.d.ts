@@ -1,5 +1,5 @@
-import { ComponentOptions } from '@/Decorator/Component';
-import { ComponentObserver } from '@/Reactivity/ComponentObserver';
+import { ComponentOptions } from '../Decorator/Component';
+import { ComponentObserver } from '../Reactivity/ComponentObserver';
 export declare abstract class AbstractComponent {
     private readonly $$;
     private readonly $root;
