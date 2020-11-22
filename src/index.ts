@@ -10,10 +10,10 @@ import {AbstractComponent} from '@/Component/AbstractComponent';
 import {registerComponent} from '@/Component/ComponentRegistry';
 
 // Public API.
-export * from '@/Decorator/Component';
-export * from '@/Decorator/Watch';
-export * from '@/Component/ComponentStyleDeclaration';
-export * from '@/Component/AbstractComponent';
+export * from './Decorator/Component';
+export * from './Decorator/Watch';
+export * from './Component/ComponentStyleDeclaration';
+export * from './Component/AbstractComponent';
 
 export const Elements: ElementsRegistry = {
     /**
