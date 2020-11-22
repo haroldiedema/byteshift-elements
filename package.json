@@ -1,7 +1,7 @@
 {
-  "name": "@haroldiedema/bim-viewer",
+  "name": "@haroldiedema/byteshift-elements",
   "version": "1.0.0",
-  "description": "A WebGL powered BIM (Building Information Modeling) viewer",
+  "description": "A reactive WebComponent microframework",
   "author": "Harold Iedema <harold@iedema.me>",
   "devDependencies": {
     "rollup": "^2.26.0",
