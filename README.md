@@ -1,7 +1,7 @@
 ![](./docs/elements.png)
 ===================
 
-Byteshift Elements is a minimalistic WebComponents library which allows you to
+Byteshift Elements is a tiny WebComponents microframework which allows you to
 build simple, *reactive*, self-contained custom elements. Byteshift Elements is
 a *zero-dependency* library, and is designed to be incorporated inside bundled
 javascript packages.
@@ -24,6 +24,7 @@ scope.
 Example component:
 
 ```ts
+// ./Components/HelloWorld.ts
 import {Component, AbstractComponent} from '@byteshift/elements';
 
 @Component({
@@ -59,6 +60,14 @@ export class HelloWorld extends AbstractComponent
 {
     public myName: string = 'John Doe';
 }
+```
+
+```ts
+// Your applications main.ts or something similar
+import {Elements} from '@byteshift/elements';
+import {HelloWorld} from './Components/HelloWorld.ts';
+
+Elements.register(HelloWorld);
 ```
 
 ```html

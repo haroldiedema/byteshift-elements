@@ -1,2 +1,2 @@
-import { ComponentStyleDeclaration } from '@/Component/IStylesheet';
+import { ComponentStyleDeclaration } from '@/Component/ComponentStyleDeclaration';
 export declare function composeStylesheet(root: ShadowRoot, componentStylesheet: ComponentStyleDeclaration): CSSStyleSheet;

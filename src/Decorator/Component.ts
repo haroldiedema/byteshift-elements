@@ -7,8 +7,7 @@
 'use strict';
 
 import {AbstractComponent}         from '@/Component/AbstractComponent';
-import {registerComponent}         from '@/Component/ComponentRegistry';
-import {ComponentStyleDeclaration} from '@/Component/IStylesheet';
+import {ComponentStyleDeclaration} from '@/Component/ComponentStyleDeclaration';
 
 /**
  * Configures the decorated class to function as a native web component.
@@ -20,7 +19,13 @@ import {ComponentStyleDeclaration} from '@/Component/IStylesheet';
 export function Component(options: ComponentOptions)
 {
     return (target: typeof AbstractComponent) => {
-        registerComponent(target, options);
+        Object.defineProperty(target, '__be_component__', {
+            configurable: false,
+            enumerable: false,
+            get() {
+                return options;
+            }
+        })
     };
 }
 

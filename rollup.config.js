@@ -28,12 +28,15 @@ export default {
             ],
         }),
         resolve({
-            extensions: ['.mjs', '.js', '.jsx', '.json', '.sass', '.scss', '.ts'],
         }),
         commonJS({
             include: 'node_modules/**',
         }),
         process.env.ROLLUP_WATCH && serve('dist'),
-        !process.env.ROLLUP_WATCH && terser()
+        !process.env.ROLLUP_WATCH && terser({
+            output: {
+                width: 120
+            }
+        })
     ],
 };
