@@ -2,7 +2,7 @@ import { ComponentOptions } from '../Decorator/Component';
 import { ComponentObserver } from '../Reactivity/ComponentObserver';
 export declare abstract class AbstractComponent {
     private readonly $$;
-    private readonly $root;
+    protected readonly $root: ShadowRoot;
     private readonly $style;
     private readonly $observer;
     constructor($$: HTMLElement, options: ComponentOptions);
@@ -20,6 +20,13 @@ export declare abstract class AbstractComponent {
      * @returns {ComponentObserver}
      */
     get __observer__(): ComponentObserver;
+    /**
+     * Returns the host element.
+     *
+     * @returns {Element}
+     * @protected
+     */
+    protected get $host(): Element;
     /**
      * Returns an HTML element from this component based on the given selector.
      *

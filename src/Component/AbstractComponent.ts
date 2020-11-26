@@ -12,7 +12,8 @@ import {composeStylesheet} from '../Stylesheet/StylesheetFactory';
 
 export abstract class AbstractComponent
 {
-    private readonly $root: ShadowRoot;
+    protected readonly $root: ShadowRoot;
+
     private readonly $style: CSSStyleSheet;
     private readonly $observer: ComponentObserver;
 
@@ -48,6 +49,17 @@ export abstract class AbstractComponent
     public get __observer__(): ComponentObserver
     {
         return this.$observer;
+    }
+
+    /**
+     * Returns the host element.
+     *
+     * @returns {Element}
+     * @protected
+     */
+    protected get $host(): Element
+    {
+        return this.$root.host;
     }
 
     /**
