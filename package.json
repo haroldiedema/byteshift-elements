@@ -1,6 +1,6 @@
 {
   "name": "@byteshift/elements",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A reactive WebComponent microframework",
   "author": "Harold Iedema <harold@iedema.me>",
   "devDependencies": {
