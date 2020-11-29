@@ -8,35 +8,8 @@
 </head>
 <body style="background: #222;color: #ddd;">
 
-<hello-world my-name="Harold Iedema">
-    Content goes here.
-</hello-world>
-
+    <main-test></main-test>
 <script>
-const Component         = ByteshiftElements.Component,
-      AbstractComponent = ByteshiftElements.AbstractComponent;
-
-class HelloWorld extends AbstractComponent {
-
-    title = 'Hello World';
-
-    onCreate()
-    {
-        this.title = 'Hello World!';
-    }
-
-    test()
-    {
-        this.title = 'It works!';
-    }
-}
-
-Component({
-    selector: 'hello-world',
-    template: `<h1>{{ title }}<slot></slot></h1><button @click="test">Blaaa</button>`
-})(HelloWorld);
-
-ByteshiftElements.Elements.register(HelloWorld);
 </script>
 </body>
 </html>

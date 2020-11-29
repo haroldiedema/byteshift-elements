@@ -185,13 +185,13 @@ export class ComponentObserver
      */
     private _bindReactiveClassesToNode(node: HTMLElement, context: any): void
     {
-        if (! node.hasAttribute(':class')) {
+        if (!node.hasAttribute(':class')) {
             return;
         }
 
         const frag = node.getAttribute(':class');
-        const deps  = this._findDependenciesInFragment(frag);
-        const func  = new Function('obj', 'node', `with(obj) {
+        const deps = this._findDependenciesInFragment(frag);
+        const func = new Function('obj', 'node', `with(obj) {
             const data = ${frag};
             Object.keys(data).forEach((key) => {
                 if (data[key]) {
@@ -245,7 +245,7 @@ export class ComponentObserver
             const deps       = this._findDependenciesInFragment(evaluation);
             const listener   = () => {
                 node.setAttribute(attribute, func(context));
-            }
+            };
 
             deps.forEach((dep) => {
                 if (this.properties.has(dep)) {
@@ -305,14 +305,18 @@ export class ComponentObserver
                 }
 
                 const tpl: ChildNode = node.cloneNode(true) as ChildNode;
-                const ctx            = Object.assign(context, {[itemVar]: item});
-                childNodes.set(item, tpl);
+                const ctx            = Object.assign({}, context, {[itemVar]: item});
 
+                this._getAllMethods(this.component).forEach((method) => {
+                    ctx[method] = context[method].bind(ctx);
+                });
+
+                childNodes.set(item, tpl);
                 insertionPoint.parentNode.insertBefore(tpl, lastChildNode.nextSibling);
                 lastChildNode = tpl;
 
                 const templateNodes = this._iterateNode(tpl, ctx);
-                templateNodes.forEach((n) => this._injectPropertyReference(n.node, n.ctx));
+                templateNodes.forEach((n) => this._injectPropertyReference(n.node, ctx));
                 templateNodes.clear();
             }
 
@@ -335,6 +339,22 @@ export class ComponentObserver
 
         this.properties.get(listVar).listeners.add(factory);
         factory();
+    }
+
+    private _getAllMethods(toCheck: any)
+    {
+        let props: any[] = [];
+        let obj: any     = toCheck;
+
+        do {
+            props = props.concat(Object.getOwnPropertyNames(obj));
+        } while (obj = Object.getPrototypeOf(obj));
+
+        return props.sort().filter(function(e, i, arr) {
+            if (e != arr[i + 1] && typeof toCheck[e] == 'function') {
+                return true;
+            }
+        });
     }
 
     private _bindReactiveStyleToNode(node: HTMLElement, context: any): void

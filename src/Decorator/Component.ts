@@ -33,6 +33,6 @@ export interface ComponentOptions
 {
     selector: string;
     template: string;
-    stylesheet?: ComponentStyleDeclaration;
+    stylesheet?: ComponentStyleDeclaration | string;
     attributes?: string[];
 }

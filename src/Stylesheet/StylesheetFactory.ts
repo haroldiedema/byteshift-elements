@@ -8,7 +8,7 @@
 
 import {ComponentStyleDeclaration} from '../Component/ComponentStyleDeclaration';
 
-export function composeStylesheet(root: ShadowRoot, componentStylesheet: ComponentStyleDeclaration): CSSStyleSheet
+export function composeStylesheet(root: ShadowRoot, componentStylesheet: ComponentStyleDeclaration | string): CSSStyleSheet
 {
     let style = document.createElement('style');
     style.appendChild(document.createTextNode(''));
@@ -16,7 +16,11 @@ export function composeStylesheet(root: ShadowRoot, componentStylesheet: Compone
 
     const sheet: CSSStyleSheet = root.styleSheets[0];
 
-    _parseStyleDeclaration(componentStylesheet, [':host'], sheet);
+    if (typeof componentStylesheet === 'string') {
+        style.innerText = componentStylesheet;
+    } else {
+        _parseStyleDeclaration(componentStylesheet, [':host'], sheet);
+    }
 
     return sheet;
 }

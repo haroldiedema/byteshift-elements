@@ -74,6 +74,7 @@ export declare class ComponentObserver {
      * @private
      */
     private _createElementIterator;
+    private _getAllMethods;
     private _bindReactiveStyleToNode;
     /**
      * Binds the 'bind' directive to the given node.
