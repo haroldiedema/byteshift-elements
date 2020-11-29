@@ -38,6 +38,7 @@ export function bindElementValueToProperty(observer: ComponentObserver, node: HT
             case 'text':
             case 'password':
             case 'color':
+            case 'time':
                 bindInputTextElement(observer, el, propertyName, context);
                 return;
             case 'number':
@@ -272,13 +273,13 @@ function bindInputTextElement(
     });
 
     observer.addPropertyListener(propertyName, (v) => {
-        if (node.checked !== v) {
-            node.checked = v;
+        if (node.value !== v) {
+            node.value = v;
         }
     });
 
-    node.value = context[propertyName];
     node.setAttribute('value', context[propertyName]);
+    node.value = context[propertyName];
 }
 
 /**
@@ -304,10 +305,11 @@ function bindInputNumberElement(
     });
 
     observer.addPropertyListener(propertyName, (v) => {
-        if (node.checked !== v) {
-            node.checked = v;
+        if (node.value !== v) {
+            node.value = v;
         }
     });
 
+    node.setAttribute('value', context[propertyName]);
     node.value = context[propertyName];
 }
