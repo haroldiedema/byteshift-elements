@@ -52,6 +52,16 @@ export abstract class AbstractComponent
     }
 
     /**
+     * Refreshes all text nodes within this component.
+     *
+     * @protected
+     */
+    protected $refreshTextNodes(): void
+    {
+        this.$observer.refreshTextNodes();
+    }
+
+    /**
      * Returns the host element.
      *
      * @returns {Element}

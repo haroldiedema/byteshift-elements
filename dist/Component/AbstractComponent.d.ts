@@ -21,6 +21,12 @@ export declare abstract class AbstractComponent {
      */
     get __observer__(): ComponentObserver;
     /**
+     * Refreshes all text nodes within this component.
+     *
+     * @protected
+     */
+    protected $refreshTextNodes(): void;
+    /**
      * Returns the host element.
      *
      * @returns {Element}

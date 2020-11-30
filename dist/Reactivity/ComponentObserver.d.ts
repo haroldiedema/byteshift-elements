@@ -6,6 +6,7 @@ export declare class ComponentObserver {
     private computedProperties;
     private nodeEventMap;
     private conditionals;
+    private textNodeListeners;
     constructor(component: AbstractComponent, root: ShadowRoot);
     /**
      * Connects the observer to the associated component.
@@ -17,6 +18,10 @@ export declare class ComponentObserver {
      * This should be executed once when the component is removed from the DOM.
      */
     disconnect(): void;
+    /**
+     * Refreshes all text nodes.
+     */
+    refreshTextNodes(): void;
     /**
      * Returns true if this observer is tracking a property with the given name.
      *

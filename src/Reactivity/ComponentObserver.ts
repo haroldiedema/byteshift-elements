@@ -15,6 +15,7 @@ export class ComponentObserver
     private computedProperties: Map<string, Set<any>>             = new Map();
     private nodeEventMap: Map<HTMLElement, Map<string, Set<any>>> = new Map();
     private conditionals: Set<() => void>                         = new Set();
+    private textNodeListeners: Set<() => void>                    = new Set();
 
     constructor(public readonly component: AbstractComponent, private root: ShadowRoot)
     {
@@ -84,6 +85,14 @@ export class ComponentObserver
         });
 
         this.nodeEventMap.clear();
+    }
+
+    /**
+     * Refreshes all text nodes.
+     */
+    public refreshTextNodes(): void
+    {
+        this.textNodeListeners.forEach((l) => l());
     }
 
     /**
@@ -707,6 +716,8 @@ export class ComponentObserver
         const listener = () => {
             node.textContent = func(this.component);
         };
+
+        this.textNodeListeners.add(listener);
 
         // Find all references to property names inside the given fragment.
         deps.forEach((dep: string) => {
