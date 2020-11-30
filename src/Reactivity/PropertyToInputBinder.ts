@@ -42,6 +42,7 @@ export function bindElementValueToProperty(observer: ComponentObserver, node: HT
                 bindInputTextElement(observer, el, propertyName, context);
                 return;
             case 'number':
+            case 'range':
                 bindInputNumberElement(observer, el, propertyName, context);
                 return;
             case 'radio':
