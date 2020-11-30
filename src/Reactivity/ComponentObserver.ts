@@ -37,6 +37,11 @@ export class ComponentObserver
                         `Cannot watch property "${ob.propertyName}" through function ${ob.method}, because this property does not exist.`);
                 }
 
+                if (ob.isBound) {
+                    return;
+                }
+                ob.isBound = true;
+
                 let isRunning: boolean = false;
 
                 this.properties.get(ob.propertyName).listeners.add((v) => {
@@ -771,4 +776,5 @@ type ObserverFunctionDecl = {
     propertyName: string;
     immediate: boolean;
     method: string;
+    isBound: boolean;
 }
