@@ -39,6 +39,8 @@ export function bindElementValueToProperty(observer: ComponentObserver, node: HT
             case 'password':
             case 'color':
             case 'time':
+            case 'date':
+            case 'datetime':
                 bindInputTextElement(observer, el, propertyName, context);
                 return;
             case 'number':

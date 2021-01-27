@@ -5,7 +5,7 @@ export declare abstract class AbstractComponent {
     protected readonly $root: ShadowRoot;
     private readonly $style;
     private readonly $observer;
-    constructor($$: HTMLElement, options: ComponentOptions);
+    protected constructor($$: HTMLElement, options: ComponentOptions);
     /**
      * Invoked when the object is created or reconnected to the DOM.
      */

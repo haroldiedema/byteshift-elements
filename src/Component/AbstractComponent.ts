@@ -17,10 +17,10 @@ export abstract class AbstractComponent
     private readonly $style: CSSStyleSheet;
     private readonly $observer: ComponentObserver;
 
-    constructor(private readonly $$: HTMLElement, options: ComponentOptions)
+    protected constructor(private readonly $$: HTMLElement, options: ComponentOptions)
     {
         this.$root           = $$.attachShadow({mode: 'open'});
-        this.$observer       = new ComponentObserver(this, this.$root);
+        this.$observer       = new ComponentObserver(this, this.$root, options.attributes || []);
         this.$root.innerHTML = options.template;
         this.$style          = composeStylesheet(this.$root, options.stylesheet || {});
     }

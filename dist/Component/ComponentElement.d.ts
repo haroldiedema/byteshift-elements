@@ -4,6 +4,7 @@ export declare abstract class ComponentElement extends HTMLElement {
     private __constructor__;
     private __component__;
     private __attributes__;
+    private __mountTimer__;
     protected constructor(Component: typeof AbstractComponent & any, options: ComponentOptions);
     /**
      * Resolves the returned promise on the next tick of the event loop.

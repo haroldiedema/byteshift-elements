@@ -310,3 +310,120 @@ given the new value as its first argument.
 Watchers are invoked _immediately_ by default, which means they are also invoked
 when the component is created. You can disable this by passing `false` to the
 second argument of `@Watch`. For example: `@Watch('isActive', false)`.
+
+## Iterators / Loops
+
+When a property is an array, it can be used to render multiple elements.
+
+```ts
+@Component({
+    selector: 'iterator-test',
+    template: `
+        <div iterate="name in names">
+            Hello {{ name }}
+        </div>
+    `
+})
+export class IteratorTest extends AbstractComponent
+{
+    private names: string[] = ['Hank', 'Pete', 'Abigail'];
+}
+```
+
+The example above will render:
+> Hello Hank
+>
+> Hello Pete
+>
+> Hello Abigail
+
+Iterators can even be used combined with conditionals within the same element.
+Let's take the same example as above, but only render names that start with the
+letter A.
+
+```ts
+@Component({
+    selector: 'iterator-test',
+    template: `
+        <div
+            iterate="name in names"
+            if="name.startsWith('A')"
+        >
+            Hello {{ name }}
+        </div>
+    `
+})
+export class IteratorTest extends AbstractComponent
+{
+    private names: string[] = ['Hank', 'Pete', 'Abigail'];
+}
+```
+
+You could even use the current item of the iterator to perform conditional
+inline styling on the element. This example will render the name Abigail in red.
+```ts
+@Component({
+    selector: 'iterator-test',
+    template: `
+        <div
+            iterate="name in names"
+            :style="{color: name === 'Abigail' ? 'red' : 'black'}"
+        >
+            Hello {{ name }}
+        </div>
+    `
+})
+export class IteratorTest extends AbstractComponent
+{
+    private names: string[] = ['Hank', 'Pete', 'Abigail'];
+}
+```
+
+## Events
+
+Events can be emitted using the `$emit()` method inside a component. This will
+emit a native `CustomEvent` object which holds a `.detail` property that will
+contain the data you passed to the `$emit()` method.
+
+Listening to events can be done by adding an attribute starting with an `@`,
+followed by the name of the event.
+
+Let's take the following example where our element has an input field. Whenever
+the value of the field changes, the `change` event is emitted.
+
+```ts
+@Component({
+    selector: 'event-test',
+    template: `
+        Name: <input type="text" bind="userInput">
+    `
+})
+export class EventTest extends AbstractComponent
+{
+    private userInput: string = '';
+    
+    @Watch('userInput')
+    private onUserInputChanged(newVal: string): void
+    {
+        this.$emit('change', newVal);
+    }
+}
+```
+
+Let's listen to this event:
+
+```ts
+@Component({
+    selector: 'event-listener-test',
+    template: `
+        <event-test @change="update($event.detail)"></event-test>
+    `
+})
+export class EventListenerTest extends AbstractComponent
+{
+    private update(value: string): void
+    {
+        console.log('The new value is: ', value);
+    }
+}
+```

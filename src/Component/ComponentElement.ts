@@ -14,6 +14,7 @@ export abstract class ComponentElement extends HTMLElement
     private __constructor__: any;
     private __component__: AbstractComponent;
     private __attributes__: { [name: string]: any } = {};
+    private __mountTimer__: any;
 
     protected constructor(Component: typeof AbstractComponent & any, options: ComponentOptions)
     {
@@ -49,6 +50,7 @@ export abstract class ComponentElement extends HTMLElement
                   options   = this.__constructor__.o;
 
             delete this.__constructor__;
+
             this.__component__ = new Component(this, options);
         }
 
@@ -57,7 +59,14 @@ export abstract class ComponentElement extends HTMLElement
         });
 
         this.__component__.__observer__.connect();
-        this.__component__.onCreate();
+
+        clearTimeout(this.__mountTimer__);
+
+        // Invoke onCreate on the next tick.
+        this.__mountTimer__ = setTimeout(() => {
+            (this.__component__ as any).__is_mounted__ = true;
+            this.__component__.onCreate();
+        }, 0);
     }
 
     /**
@@ -67,6 +76,9 @@ export abstract class ComponentElement extends HTMLElement
      */
     private disconnectedCallback()
     {
+        clearTimeout(this.__mountTimer__);
+        (this.__component__ as any).__is_mounted__ = false;
+
         if (this.__component__) {
             this.__component__.onDestroy();
             this.__component__.__observer__.disconnect();

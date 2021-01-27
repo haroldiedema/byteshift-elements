@@ -2,12 +2,13 @@ import { AbstractComponent } from '../Component/AbstractComponent';
 export declare class ComponentObserver {
     readonly component: AbstractComponent;
     private root;
+    private attributes;
     private properties;
     private computedProperties;
     private nodeEventMap;
     private conditionals;
     private textNodeListeners;
-    constructor(component: AbstractComponent, root: ShadowRoot);
+    constructor(component: AbstractComponent, root: ShadowRoot, attributes: string[]);
     /**
      * Connects the observer to the associated component.
      * This should be executed once when the component is added to the DOM.

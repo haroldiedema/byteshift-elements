@@ -17,7 +17,7 @@ export class ComponentObserver
     private conditionals: Set<() => void>                         = new Set();
     private textNodeListeners: Set<() => void>                    = new Set();
 
-    constructor(public readonly component: AbstractComponent, private root: ShadowRoot)
+    constructor(public readonly component: AbstractComponent, private root: ShadowRoot, private attributes: string[])
     {
     }
 
@@ -30,49 +30,64 @@ export class ComponentObserver
         this._initializeComponentReactivity();
         const templateNodes = this._iterateNode(this.root as any, this.component);
 
-        if (typeof (this.component.constructor as any).__observerFunctions__ !== 'undefined') {
-            (this.component.constructor as any).__observerFunctions__.forEach((ob: ObserverFunctionDecl) => {
-                if (!this.properties.has(ob.propertyName)) {
-                    throw new Error(
-                        `Cannot watch property "${ob.propertyName}" through function ${ob.method}, because this property does not exist.`);
-                }
-
-                if (ob.isBound) {
-                    return;
-                }
-                ob.isBound = true;
-
-                let isRunning: boolean = false;
-
-                this.properties.get(ob.propertyName).listeners.add((v) => {
-                    if (isRunning) {
-                        return;
-                    }
-                    isRunning = true;
-                    (this.component as any)[ob.method](v);
-                    isRunning = false;
+        setTimeout(() => {
+            for (let attributeName of this.attributes) {
+                this.properties.set(attributeName, {
+                    name:      attributeName,
+                    value:     this.root.host.getAttribute(attributeName),
+                    listeners: new Set(),
                 });
+            }
 
-                if (ob.immediate) {
-                    if (isRunning) {
-                        return;
+            if (typeof (this.component.constructor as any).__observerFunctions__ !== 'undefined') {
+                (this.component.constructor as any).__observerFunctions__.forEach((ob: ObserverFunctionDecl) => {
+                    if (!this.properties.has(ob.propertyName)) {
+                        throw new Error(
+                            `Cannot watch property "${ob.propertyName}" through function ${ob.method}, because this property does not exist.`);
                     }
-                    isRunning = true;
-                    (this.component as any)[ob.method](this.properties.get(ob.propertyName).value);
-                    isRunning = false;
-                }
-            });
-        }
 
-        // Inject template nodes after iteration is complete due to
-        // modifications made to the DOM while iterating through it.
-        templateNodes.forEach((n) => this._injectPropertyReference(n.node, n.ctx));
-        templateNodes.clear();
+                    let isRunning: boolean = false;
 
-        // Execute conditional bindings (if-directives) as the very
-        // last thing to do, since this may drastically modify the DOM.
-        this.conditionals.forEach(fn => fn());
-        this.conditionals.clear();
+                    this.properties.get(ob.propertyName).listeners.add((v) => {
+                        if (isRunning) {
+                            return;
+                        }
+                        isRunning = true;
+                        setTimeout(() => {
+                            if ((this.component as any).__is_mounted__) {
+                                (this.component as any)[ob.method](v);
+                            }
+                            isRunning = false;
+                        }, 0);
+                    });
+
+                    if (ob.immediate) {
+                        if (isRunning) {
+                            return;
+                        }
+                        isRunning = true;
+                        setTimeout(() => {
+                            if ((this.component as any).__is_mounted__) {
+                                (this.component as any)[ob.method](this.properties.get(ob.propertyName).value);
+                            }
+                            isRunning = false;
+                        }, 0);
+                    }
+                });
+            }
+
+            // Inject template nodes after iteration is complete due to
+            // modifications made to the DOM while iterating through it.
+            templateNodes.forEach((n) => this._injectPropertyReference(n.node, n.ctx));
+            templateNodes.clear();
+
+            // Execute conditional bindings (if-directives) as the very
+            // last thing to do, since this may drastically modify the DOM.
+            setTimeout(() => {
+                this.conditionals.forEach(fn => fn());
+                this.conditionals.clear();
+            }, 0);
+        }, 0);
     }
 
     /**
@@ -169,7 +184,9 @@ export class ComponentObserver
         }
 
         // Depth-first iteration due to the chance of DOM changes while connecting.
-        node.childNodes.forEach((childNode: ChildNode) => this._iterateNode(childNode, context, templateNodes));
+        node.childNodes.forEach((childNode: ChildNode) => {
+            this._iterateNode(childNode, context, templateNodes);
+        });
 
         // Handle text nodes.
         if (this._nodeHasPropertyReference(node)) {
@@ -258,7 +275,13 @@ export class ComponentObserver
             const func       = new Function('obj', `with(obj) { return ${evaluation}; }`);
             const deps       = this._findDependenciesInFragment(evaluation);
             const listener   = () => {
-                node.setAttribute(attribute, func(context));
+                const result = func(context);
+
+                if (typeof result === 'boolean' && result === false) {
+                    node.removeAttribute(attribute);
+                } else {
+                    node.setAttribute(attribute, result);
+                }
             };
 
             deps.forEach((dep) => {
@@ -352,7 +375,9 @@ export class ComponentObserver
         };
 
         this.properties.get(listVar).listeners.add(factory);
-        factory();
+
+        // Run factory on next tick!
+        setTimeout(() => factory(), 0);
     }
 
     private _getAllMethods(toCheck: any)
@@ -436,15 +461,32 @@ export class ComponentObserver
         const frag      = document.createComment(`{${node.tagName.toLowerCase()}}.if:(${condition})`);
         const deps      = this._findDependenciesInFragment(condition);
 
-        const listener = () => {
-            if (func(context)) {
-                if (frag.parentNode) {
-                    frag.replaceWith(node);
-                }
-                return;
-            }
+        // Hide the node initially to prevent inaccurate initial draw.
+        // Since the element is mounted initially by nature, its component class
+        // will still be instantiated.
+        node.replaceWith(frag);
 
-            node.replaceWith(frag);
+        deps.forEach((dep) => {
+            context[dep] = this.properties.has(dep) ? this.properties.get(dep).value : context[dep];
+        });
+
+        const listener = () => {
+            deps.forEach((dep) => {
+                context[dep] = this.properties.has(dep) ? this.properties.get(dep).value : context[dep];
+            });
+
+            setTimeout(() => {
+                // Run conditional replacements on the next tick to allow re-
+                // evaluation of reactive attributes before the node is created.
+                if (func(context)) {
+                    if (frag.parentNode) {
+                        frag.replaceWith(node);
+                    }
+                    return;
+                }
+
+                node.replaceWith(frag);
+            }, 0);
         };
 
         deps.forEach((dep) => {
@@ -488,10 +530,12 @@ export class ComponentObserver
                     method = method + '($event instanceof CustomEvent ? $event.detail : $event)';
                 }
 
-                const event    = names[i].substr(1).toLowerCase();
-                const func     = new Function('obj', '$event', `with(obj) { return ${method}; }`);
+                const event = names[i].substr(1).toLowerCase();
+                const func  = new Function('obj', '$event', `with(obj) { return ${method}; }`);
+
                 const listener = (event: Event) => {
-                    return func(context, event);
+                    const result = func(context, event);
+                    return typeof result === 'function' ? result(event) : result;
                 };
 
                 // Keep a reference of the listener.
