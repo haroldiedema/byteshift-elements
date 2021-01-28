@@ -791,7 +791,12 @@
             deps.forEach((dep) => {
                 context[dep] = this.properties.has(dep) ? this.properties.get(dep).value : context[dep];
             });
+            let isRunning = false;
             const listener = () => {
+                if (isRunning) {
+                    return;
+                }
+                isRunning = true;
                 deps.forEach((dep) => {
                     context[dep] = this.properties.has(dep) ? this.properties.get(dep).value : context[dep];
                 });
@@ -801,10 +806,12 @@
                     if (func(context)) {
                         if (frag.parentNode) {
                             frag.replaceWith(node);
+                            isRunning = false;
                         }
                         return;
                     }
                     node.replaceWith(frag);
+                    isRunning = false;
                 }, 0);
             };
             deps.forEach((dep) => {

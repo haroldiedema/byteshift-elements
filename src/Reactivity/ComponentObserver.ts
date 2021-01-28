@@ -470,7 +470,13 @@ export class ComponentObserver
             context[dep] = this.properties.has(dep) ? this.properties.get(dep).value : context[dep];
         });
 
+        let isRunning: boolean = false;
         const listener = () => {
+            if (isRunning) {
+                return;
+            }
+            isRunning = true;
+
             deps.forEach((dep) => {
                 context[dep] = this.properties.has(dep) ? this.properties.get(dep).value : context[dep];
             });
@@ -481,11 +487,13 @@ export class ComponentObserver
                 if (func(context)) {
                     if (frag.parentNode) {
                         frag.replaceWith(node);
+                        isRunning = false;
                     }
                     return;
                 }
 
                 node.replaceWith(frag);
+                isRunning = false;
             }, 0);
         };
 
