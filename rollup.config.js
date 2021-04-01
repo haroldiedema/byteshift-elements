@@ -27,8 +27,7 @@ export default {
                 },
             ],
         }),
-        resolve({
-        }),
+        resolve(),
         commonJS({
             include: 'node_modules/**',
         }),

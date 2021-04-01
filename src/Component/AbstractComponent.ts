@@ -79,7 +79,7 @@ export abstract class AbstractComponent
      * @returns {HTMLElement}
      * @protected
      */
-    protected $query(selector: string): HTMLElement
+    protected $query<T extends Element>(selector: string): T
     {
         return this.$root.querySelector(selector);
     }
@@ -92,7 +92,7 @@ export abstract class AbstractComponent
      * @returns {HTMLElement[]}
      * @protected
      */
-    protected $queryAll(selector: string): HTMLElement[]
+    protected $queryAll<T extends Element>(selector: string): T[]
     {
         return Array.from(this.$root.querySelectorAll(selector));
     }

@@ -40,7 +40,7 @@ export declare abstract class AbstractComponent {
      * @returns {HTMLElement}
      * @protected
      */
-    protected $query(selector: string): HTMLElement;
+    protected $query<T extends Element>(selector: string): T;
     /**
      * Returns a list of matching HTML elements based on the given selector
      * from this component.
@@ -49,7 +49,7 @@ export declare abstract class AbstractComponent {
      * @returns {HTMLElement[]}
      * @protected
      */
-    protected $queryAll(selector: string): HTMLElement[];
+    protected $queryAll<T extends Element>(selector: string): T[];
     /**
      * Returns a component reference from the given selector.
      *
